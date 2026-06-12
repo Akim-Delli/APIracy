@@ -1,5 +1,14 @@
 # APIracy 🏴‍☠️ — Image Processing Service
 
+[![Lint](https://github.com/Akim-Delli/APIracy/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/Akim-Delli/APIracy/actions/workflows/lint.yml)
+[![Tests](https://github.com/Akim-Delli/APIracy/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Akim-Delli/APIracy/actions/workflows/test.yml)
+[![Build](https://github.com/Akim-Delli/APIracy/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Akim-Delli/APIracy/actions/workflows/build.yml)
+[![Deploy](https://github.com/Akim-Delli/APIracy/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Akim-Delli/APIracy/actions/workflows/deploy.yml)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
+![Vercel](https://img.shields.io/badge/deployed%20on-Vercel-black?logo=vercel)
+![Supabase](https://img.shields.io/badge/cache-Supabase-3FCF8E?logo=supabase&logoColor=white)
+
 A Cloudinary-style image processing API: pass a public image URL and transformation
 parameters, get back a resized/converted image. Includes video thumbnail extraction,
 Supabase-backed CDN caching, an interactive playground UI and full OpenAPI documentation.
@@ -128,7 +137,7 @@ tests/
   unit/                       # schemas, ssrf, cache keys, pipeline
   integration/                # route handlers against a local fixture server
 scripts/setup-supabase.ts     # one-time bucket bootstrap
-.github/workflows/            # ci.yml (verify) + deploy.yml (Vercel)
+.github/workflows/            # lint.yml, test.yml, build.yml + deploy.yml (Vercel)
 ```
 
 ## Getting started
@@ -188,7 +197,7 @@ from it. No network or external services needed.
    | `VERCEL_ORG_ID` | `.vercel/project.json` after `vercel link` |
    | `VERCEL_PROJECT_ID` | `.vercel/project.json` after `vercel link` |
 
-4. Push to `main`. `ci.yml` lints/typechecks/tests/builds on every push;
+4. Push to `main`. The `Lint`, `Tests` and `Build` workflows verify every push;
    `deploy.yml` ships `main` to production.
 
 ## Design decisions & trade-offs
