@@ -41,6 +41,8 @@
   --checker-a: #13131d;
   --checker-b: #0c0c14;
   --code-accent: #bfdbfe;
+  --panel-bg: #12121c;
+  --panel-muted: #1c1c29;
   --border-gradient: linear-gradient(135deg, rgba(167, 139, 250, 0.5), rgba(96, 165, 250, 0.3) 40%, rgba(34, 211, 238, 0.4));
 }
 
@@ -68,6 +70,8 @@
   --checker-a: #e3e5f0;
   --checker-b: #eef0f8;
   --code-accent: #2563eb;
+  --panel-bg: #ffffff;
+  --panel-muted: #f1f2f8;
   --border-gradient: linear-gradient(135deg, rgba(124, 58, 237, 0.45), rgba(37, 99, 235, 0.3) 40%, rgba(8, 145, 178, 0.4));
 }
 
@@ -247,4 +251,122 @@ input[type="range"]::-moz-range-thumb {
 }
 input[type="range"]:disabled {
   opacity: 0.4;
+}
+
+/* Opaque chat panel with the gradient hairline border (no transparency). */
+.chat-panel {
+  position: relative;
+  border-radius: 1rem;
+  background: var(--panel-bg);
+  box-shadow: 0 28px 70px -24px rgba(0, 0, 0, 0.65);
+}
+.chat-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--border-gradient);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Markdown rendering inside assistant messages. */
+.md {
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.md > :first-child {
+  margin-top: 0;
+}
+.md > :last-child {
+  margin-bottom: 0;
+}
+.md p {
+  margin: 0.5rem 0;
+}
+.md h1,
+.md h2,
+.md h3,
+.md h4 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0.9rem 0 0.4rem;
+}
+.md h1 {
+  font-size: 1.05rem;
+}
+.md h2 {
+  font-size: 1rem;
+}
+.md h3,
+.md h4 {
+  font-size: 0.92rem;
+}
+.md ul,
+.md ol {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+.md ul {
+  list-style: disc;
+}
+.md ol {
+  list-style: decimal;
+}
+.md li {
+  margin: 0.2rem 0;
+}
+.md a {
+  color: var(--code-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.md strong {
+  font-weight: 600;
+  color: var(--fg);
+}
+.md code {
+  font-family: var(--font-geist-mono, ui-monospace, "SF Mono", Menlo, monospace);
+  font-size: 0.82em;
+  background: var(--panel-muted);
+  border: 1px solid var(--border);
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.3rem;
+}
+.md pre {
+  background: var(--panel-muted);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  padding: 0.7rem 0.85rem;
+  overflow-x: auto;
+  margin: 0.6rem 0;
+}
+.md pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 0.8rem;
+}
+.md blockquote {
+  border-left: 3px solid var(--border-strong);
+  padding-left: 0.75rem;
+  margin: 0.6rem 0;
+  color: var(--fg-muted);
+}
+.md table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.6rem 0;
+  font-size: 0.82rem;
+}
+.md th,
+.md td {
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.5rem;
+  text-align: left;
 }

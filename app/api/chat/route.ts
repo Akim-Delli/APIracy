@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { NextRequest } from "next/server";
 import { CHAT_DISABLED_MESSAGE, SYSTEM_PROMPT } from "@/lib/assistant-prompt";
-import { clientIp, parseChatMessages, rateLimit } from "@/lib/chat";
+import { parseChatMessages } from "@/lib/chat";
 import { errorResponse } from "@/lib/errors";
 
 export const dynamic = "force-dynamic";
@@ -15,13 +15,6 @@ export async function POST(request: NextRequest): Promise<Response> {
     messages = parseChatMessages(await request.json().catch(() => null));
   } catch (err) {
     return errorResponse(err);
-  }
-
-  if (!rateLimit(clientIp(request.headers))) {
-    return Response.json(
-      { error: { code: "RATE_LIMITED", message: "Too many messages — please slow down a moment." } },
-      { status: 429 },
-    );
   }
 
   // Graceful degradation: no key configured -> friendly fallback, never a 500.

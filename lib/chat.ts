@@ -53,33 +53,3 @@ export function parseChatMessages(body: unknown): ChatMessage[] {
   }
   return messages;
 }
-
-interface Bucket {
-  count: number;
-  resetAt: number;
-}
-const buckets = new Map<string, Bucket>();
-const WINDOW_MS = 5 * 60_000;
-const MAX_PER_WINDOW = 20;
-
-/**
- * Best-effort fixed-window per-IP rate limit for the public, paid endpoint.
- * In-memory and per-instance (good enough as a basic abuse guard on Vercel).
- */
-export function rateLimit(ip: string, now = Date.now()): boolean {
-  const bucket = buckets.get(ip);
-  if (!bucket || now >= bucket.resetAt) {
-    buckets.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return true;
-  }
-  if (bucket.count >= MAX_PER_WINDOW) return false;
-  bucket.count += 1;
-  return true;
-}
-
-/** Pulls the client IP from proxy headers, falling back to a shared bucket. */
-export function clientIp(headers: Headers): string {
-  const fwd = headers.get("x-forwarded-for");
-  if (fwd) return fwd.split(",")[0].trim();
-  return headers.get("x-real-ip") ?? "unknown";
-}
