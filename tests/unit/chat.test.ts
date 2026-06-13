@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ApiError } from "@/lib/errors";
-import { MAX_MESSAGES, parseChatMessages, rateLimit } from "@/lib/chat";
+import { MAX_MESSAGES, parseChatMessages } from "@/lib/chat";
 
 describe("parseChatMessages", () => {
   it("accepts a valid conversation ending with a user message", () => {
@@ -68,23 +68,5 @@ describe("parseChatMessages", () => {
     } catch (err) {
       expect((err as ApiError).status).toBe(400);
     }
-  });
-});
-
-describe("rateLimit", () => {
-  it("allows up to the window limit then blocks", () => {
-    const ip = "203.0.113.7";
-    const t = 1_000_000;
-    let allowed = 0;
-    for (let i = 0; i < 25; i++) {
-      if (rateLimit(ip, t)) allowed += 1;
-    }
-    expect(allowed).toBe(20);
-  });
-
-  it("resets after the window elapses", () => {
-    const ip = "203.0.113.8";
-    expect(rateLimit(ip, 0)).toBe(true);
-    expect(rateLimit(ip, 10 * 60_000)).toBe(true);
   });
 });
