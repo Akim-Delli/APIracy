@@ -157,6 +157,34 @@ To test against images on your own machine/network, set `SSRF_ALLOW_PRIVATE=true
 curl -L "http://localhost:3000/api/process?url=https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg&width=400&format=webp" -o cat.webp
 ```
 
+### Run with Docker (local)
+
+A `Dockerfile` and `docker-compose.yml` are provided for running the service
+locally — production is deployed to Vercel, so this is purely a convenience for
+local use. The image is Debian-based so sharp (libvips) and the bundled ffmpeg
+binary work without extra system packages.
+
+```bash
+docker compose up --build      # builds, then serves http://localhost:3000
+```
+
+Or with plain Docker:
+
+```bash
+docker build -t apiracy .
+docker run --rm -p 3000:3000 apiracy
+```
+
+With no configuration the container runs in **cache-bypass** mode (results are
+streamed directly, `X-Cache: BYPASS`). To enable the Supabase cache, create a
+`.env` (see `.env.example`) — `docker compose` picks it up automatically:
+
+```env
+SUPABASE_URL=https://<project-ref>.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
+# SSRF_ALLOW_PRIVATE=true   # only if you need to fetch from localhost/private hosts
+```
+
 ### Run tests
 
 ```bash
