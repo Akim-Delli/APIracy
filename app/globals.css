@@ -1,26 +1,74 @@
 @import "tailwindcss";
 
 /*
- * "Aurora glass" theme: near-black canvas, drifting aurora gradient mesh,
- * frosted glass panels with gradient hairline borders, and a vibrant
- * violet -> fuchsia -> cyan spectrum accent.
+ * "Aurora glass" theme with light + dark modes.
+ * Colors are driven by semantic CSS variables so every surface adapts to the
+ * active theme; the vibrant violet -> blue -> cyan accent is shared by both.
+ * Theme is selected by a `.light` / `.dark` class on <html>.
  */
 @theme {
-  --color-ink-950: #06060a;
-  --color-ink-900: #0a0a12;
-  --color-ink-850: #0f0f1a;
-  --color-ink-800: #15151f;
-  --color-ink-700: #1d1d2b;
-
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-grotesk), var(--font-inter), ui-sans-serif, sans-serif;
 
   --animate-aurora: aurora 22s ease-in-out infinite;
   --animate-aurora-slow: aurora 30s ease-in-out infinite;
-  --animate-float: float 9s ease-in-out infinite;
   --animate-gradient: gradient 6s linear infinite;
   --animate-rise: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-spin-slow: spin 28s linear infinite;
+}
+
+/* Dark theme (default). */
+:root,
+.dark {
+  --bg: #06060a;
+  --header-bg: rgba(6, 6, 10, 0.6);
+  --fg: #e7e7ef;
+  --fg-muted: #a1a1aa;
+  --fg-subtle: #71717a;
+  --fg-faint: #52525b;
+  --surface: rgba(255, 255, 255, 0.035);
+  --surface-hover: rgba(255, 255, 255, 0.08);
+  --field-bg: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.18);
+  --hairline: rgba(255, 255, 255, 0.05);
+  --glass-highlight: rgba(255, 255, 255, 0.07);
+  --glass-shadow: rgba(0, 0, 0, 0.7);
+  --grid-line: rgba(255, 255, 255, 0.03);
+  --grain-opacity: 0.15;
+  --aurora-1: rgba(139, 92, 246, 0.35);
+  --aurora-2: rgba(59, 130, 246, 0.28);
+  --aurora-3: rgba(6, 182, 212, 0.25);
+  --checker-a: #13131d;
+  --checker-b: #0c0c14;
+  --code-accent: #bfdbfe;
+  --border-gradient: linear-gradient(135deg, rgba(167, 139, 250, 0.5), rgba(96, 165, 250, 0.3) 40%, rgba(34, 211, 238, 0.4));
+}
+
+/* Light theme. */
+.light {
+  --bg: #eef0f8;
+  --header-bg: rgba(238, 240, 248, 0.7);
+  --fg: #18181b;
+  --fg-muted: #52525b;
+  --fg-subtle: #71717a;
+  --fg-faint: #a1a1aa;
+  --surface: rgba(255, 255, 255, 0.75);
+  --surface-hover: rgba(255, 255, 255, 0.95);
+  --field-bg: rgba(255, 255, 255, 0.85);
+  --border: rgba(15, 23, 42, 0.1);
+  --border-strong: rgba(15, 23, 42, 0.2);
+  --hairline: rgba(15, 23, 42, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.9);
+  --glass-shadow: rgba(30, 41, 90, 0.18);
+  --grid-line: rgba(15, 23, 42, 0.04);
+  --grain-opacity: 0.04;
+  --aurora-1: rgba(139, 92, 246, 0.22);
+  --aurora-2: rgba(59, 130, 246, 0.18);
+  --aurora-3: rgba(6, 182, 212, 0.16);
+  --checker-a: #e3e5f0;
+  --checker-b: #eef0f8;
+  --code-accent: #2563eb;
+  --border-gradient: linear-gradient(135deg, rgba(124, 58, 237, 0.45), rgba(37, 99, 235, 0.3) 40%, rgba(8, 145, 178, 0.4));
 }
 
 @keyframes aurora {
@@ -33,16 +81,6 @@
   }
   66% {
     transform: translate(-6%, 6%) scale(0.95);
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-12px) rotate(0.5deg);
   }
 }
 
@@ -72,13 +110,16 @@
   }
 
   body {
-    background-color: #06060a;
-    color: #e7e7ef;
+    background-color: var(--bg);
+    color: var(--fg);
     -webkit-font-smoothing: antialiased;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
   }
 
   ::selection {
-    background: rgba(168, 85, 247, 0.35);
+    background: rgba(99, 102, 241, 0.35);
     color: #fff;
   }
 
@@ -90,18 +131,14 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--border-strong);
     border-radius: 9999px;
     border: 2px solid transparent;
     background-clip: content-box;
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.22);
-    background-clip: content-box;
-  }
 }
 
-/* Animated multi-stop spectrum text. */
+/* Animated multi-stop spectrum text (shared across themes). */
 .gradient-text {
   background-image: linear-gradient(110deg, #a78bfa, #60a5fa, #22d3ee, #a78bfa);
   background-size: 200% auto;
@@ -112,26 +149,30 @@
   animation: gradient 6s linear infinite;
 }
 
+.light .gradient-text {
+  background-image: linear-gradient(110deg, #7c3aed, #2563eb, #0891b2, #7c3aed);
+}
+
 /* Frosted glass surface. */
 .glass {
-  background: rgba(255, 255, 255, 0.035);
+  background: var(--surface);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
-    0 24px 60px -28px rgba(0, 0, 0, 0.7);
+    inset 0 1px 0 0 var(--glass-highlight),
+    0 24px 60px -28px var(--glass-shadow);
 }
 
 /* Glass card with a gradient hairline border. */
 .glass-card {
   position: relative;
   border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.035);
+  background: var(--surface);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
-    0 24px 60px -30px rgba(0, 0, 0, 0.7);
+    inset 0 1px 0 0 var(--glass-highlight),
+    0 24px 60px -30px var(--glass-shadow);
 }
 
 .glass-card::before {
@@ -140,7 +181,7 @@
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.5), rgba(96, 165, 250, 0.3) 40%, rgba(34, 211, 238, 0.4));
+  background: var(--border-gradient);
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -149,7 +190,7 @@
   pointer-events: none;
 }
 
-/* Spectrum gradient CTA with glow. */
+/* Spectrum gradient CTA with glow (shared across themes). */
 .btn-gradient {
   position: relative;
   background-image: linear-gradient(110deg, #8b5cf6, #3b82f6, #06b6d4);
@@ -176,13 +217,13 @@
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Dark theme range slider. */
+/* Theme-aware range slider. */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   height: 4px;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--border-strong);
   outline: none;
 }
 input[type="range"]::-webkit-slider-thumb {
@@ -202,7 +243,7 @@ input[type="range"]::-moz-range-thumb {
   border-radius: 9999px;
   background: linear-gradient(135deg, #818cf8, #22d3ee);
   cursor: pointer;
-  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.18);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18);
 }
 input[type="range"]:disabled {
   opacity: 0.4;
