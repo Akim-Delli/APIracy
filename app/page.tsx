@@ -72,69 +72,6 @@ function Header() {
   );
 }
 
-function HeroVisual() {
-  return (
-    <div className="relative mx-auto w-full max-w-md lg:mx-0">
-      <div className="absolute -inset-6 -z-10 rounded-[2rem] bg-[radial-gradient(circle,rgba(217,70,239,0.25),transparent_70%)] blur-2xl" />
-      <div className="animate-float glass-card overflow-hidden p-3">
-        {/* browser bar */}
-        <div className="flex items-center gap-1.5 px-2 pb-3 pt-1">
-          <span className="h-2.5 w-2.5 rounded-full bg-rose-400/70" />
-          <span className="h-2.5 w-2.5 rounded-full bg-amber-400/70" />
-          <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/70" />
-          <span className="ml-3 truncate rounded-md bg-white/5 px-2 py-1 font-mono text-[10px] text-zinc-400">
-            /api/process?url=…&width=800&format=webp
-          </span>
-        </div>
-        {/* "image" canvas */}
-        <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-[conic-gradient(from_180deg_at_50%_50%,#8b5cf6,#d946ef,#06b6d4,#8b5cf6)]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.35),transparent_55%)]" />
-          <div className="absolute inset-0 grain opacity-20 mix-blend-overlay" />
-          <div className="absolute bottom-3 left-3 flex gap-2">
-            <span className="rounded-full bg-black/40 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur">800×600</span>
-            <span className="rounded-full bg-black/40 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur">WebP · q80</span>
-          </div>
-        </div>
-      </div>
-      {/* floating chips */}
-      <div className="glass absolute -right-5 top-16 hidden rounded-xl px-3 py-2 text-xs text-zinc-200 sm:block">
-        <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-emerald-400" />
-        cache HIT · 12ms
-      </div>
-      <div className="glass absolute -left-5 bottom-12 hidden rounded-xl px-3 py-2 text-xs text-zinc-200 sm:block">
-        resize · convert · crop
-      </div>
-    </div>
-  );
-}
-
-const FEATURES = [
-  {
-    title: "Resize & crop",
-    body: "Scale to any dimension up to 4096px with fill, fit, scale or centered-crop modes — aspect ratio handled for you.",
-    icon: "M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4",
-    grad: "from-violet-500 to-fuchsia-500",
-  },
-  {
-    title: "Convert formats",
-    body: "JPEG, PNG, WebP and AVIF on the fly, with per-request quality control for the lossy formats.",
-    icon: "M4 7l8-4 8 4M4 7v10l8 4 8-4V7M4 7l8 4 8-4M12 11v10",
-    grad: "from-fuchsia-500 to-pink-500",
-  },
-  {
-    title: "Video thumbnails",
-    body: "Grab a frame from any video at a timestamp, then run it through the exact same transform pipeline.",
-    icon: "M15 10l4.55-2.28A1 1 0 0121 8.6v6.8a1 1 0 01-1.45.88L15 14M4 6h9a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2z",
-    grad: "from-cyan-400 to-sky-500",
-  },
-  {
-    title: "Edge-cached",
-    body: "Every result is cached in Supabase Storage and served from the CDN — repeat requests are instant.",
-    icon: "M3 12a9 3 0 0018 0M3 5a9 3 0 0018 0v14a9 3 0 01-18 0zM3 12v7",
-    grad: "from-emerald-400 to-teal-500",
-  },
-];
-
 export default function Home() {
   const [mode, setMode] = useState<Mode>("image");
   const [url, setUrl] = useState(SAMPLE_URLS.image);
@@ -233,8 +170,8 @@ export default function Home() {
 
       <main className="relative mx-auto max-w-6xl px-6">
         {/* Hero */}
-        <section className="animate-rise grid items-center gap-12 pt-20 pb-16 sm:pt-24 lg:grid-cols-2">
-          <div className="text-center lg:text-left">
+        <section className="animate-rise pt-20 pb-16 text-center sm:pt-28">
+          <div className="mx-auto max-w-3xl">
             <span className="glass inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium text-zinc-300">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_2px_rgba(52,211,153,0.6)]" />
               OpenAPI 3.1 · no auth · edge-cached
@@ -244,11 +181,11 @@ export default function Home() {
               <br />
               with <span className="gradient-text">one URL</span>
             </h1>
-            <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-zinc-400 lg:mx-0">
+            <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-zinc-400">
               A Cloudinary-style API to resize, crop and convert any public image — or pull a
               thumbnail from a video — in a single GET request. Results cached on the edge.
             </p>
-            <div className="mt-8 flex items-center justify-center gap-3 lg:justify-start">
+            <div className="mt-8 flex items-center justify-center gap-3">
               <a href="#playground" className="btn-gradient rounded-xl px-5 py-3 text-sm font-semibold">
                 Open the playground
               </a>
@@ -259,33 +196,6 @@ export default function Home() {
                 Read the docs
               </Link>
             </div>
-          </div>
-          <HeroVisual />
-        </section>
-
-        {/* Features */}
-        <section className="py-16">
-          <div className="mb-10 text-center">
-            <span className="gradient-text text-sm font-semibold">Built for developers</span>
-            <h2 className="font-display mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Everything you&apos;d expect, beautifully fast
-            </h2>
-          </div>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {FEATURES.map((f) => (
-              <div
-                key={f.title}
-                className="glass-card group p-6 transition-transform duration-300 hover:-translate-y-1"
-              >
-                <span className={`flex h-11 w-11 items-center justify-center rounded-xl bg-linear-to-br ${f.grad} text-white shadow-lg`}>
-                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={1.8}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d={f.icon} />
-                  </svg>
-                </span>
-                <h3 className="font-display mt-4 text-lg font-semibold text-white">{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-zinc-400">{f.body}</p>
-              </div>
-            ))}
           </div>
         </section>
 
