@@ -1,6 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
+import Link from "next/link";
+import { SpaceBackground } from "./_components/space-background";
+import { SiteHeader } from "./_components/site-header";
+import { SiteFooter } from "./_components/site-footer";
 
 type Mode = "image" | "video";
 
@@ -20,63 +24,9 @@ interface ResultState {
   contentType: string;
 }
 
-/* Deterministic PRNG so the starfield renders identically on server and client. */
-function mulberry32(seed: number): () => number {
-  return () => {
-    seed |= 0;
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-const STARS = (() => {
-  const rand = mulberry32(42);
-  return Array.from({ length: 70 }, () => ({
-    top: rand() * 100,
-    left: rand() * 100,
-    size: rand() * 1.6 + 0.6,
-    delay: rand() * 5,
-    duration: rand() * 4 + 3,
-  }));
-})();
-
-function SpaceBackground() {
-  return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      {/* base gradient wash */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,#1e1b4b_0%,transparent_55%)]" />
-      <div className="absolute inset-0 bg-[#0e0c15]/40" />
-      {/* faint grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[length:64px_64px] [mask-image:radial-gradient(ellipse_70%_50%_at_50%_0%,#000_60%,transparent_100%)]" />
-      {/* glow orbs */}
-      <div className="animate-pulse-glow absolute -top-32 left-1/2 h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-indigo-600/20 blur-[120px]" />
-      <div className="animate-pulse-glow absolute top-1/3 -right-32 h-96 w-96 rounded-full bg-fuchsia-600/10 blur-[100px] [animation-delay:2s]" />
-      {/* stars */}
-      <div className="absolute inset-0">
-        {STARS.map((s, i) => (
-          <span
-            key={i}
-            className="animate-twinkle absolute rounded-full bg-white"
-            style={{
-              top: `${s.top}%`,
-              left: `${s.left}%`,
-              width: `${s.size}px`,
-              height: `${s.size}px`,
-              animationDelay: `${s.delay}s`,
-              animationDuration: `${s.duration}s`,
-            }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function StellarOrb() {
   return (
-    <div aria-hidden className="pointer-events-none relative mx-auto mt-16 h-64 w-64 sm:h-80 sm:w-80">
+    <div aria-hidden className="pointer-events-none relative mx-auto mt-14 h-60 w-60 sm:h-72 sm:w-72">
       <div className="animate-pulse-glow absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_40%,#818cf8_0%,#4f46e5_35%,transparent_70%)] blur-xl" />
       <div className="animate-float absolute inset-8 rounded-full bg-[radial-gradient(circle_at_35%_30%,#c7d2fe,#4338ca_60%,#1e1b4b)] shadow-[0_0_80px_-10px_rgba(99,102,241,0.8)]" />
       <div className="absolute inset-0 rounded-full border border-indigo-400/20" />
@@ -104,13 +54,7 @@ function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) 
   );
 }
 
-function SpotlightCard({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
+function SpotlightCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   function onMouseMove(e: MouseEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
     e.currentTarget.style.setProperty("--x", `${e.clientX - rect.left}px`);
@@ -120,6 +64,14 @@ function SpotlightCard({
     <div onMouseMove={onMouseMove} className={`spotlight-card rounded-2xl ${className}`}>
       {children}
     </div>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-block bg-linear-to-r from-indigo-400 to-fuchsia-400 bg-clip-text text-sm font-semibold text-transparent">
+      {children}
+    </span>
   );
 }
 
@@ -235,43 +187,18 @@ export default function Home() {
   return (
     <>
       <SpaceBackground />
-
-      {/* Header */}
-      <header className="sticky top-0 z-30 border-b border-white/5 bg-space-900/70 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <a href="#" className="flex items-center gap-2 font-display text-lg font-semibold text-white">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-linear-to-tr from-indigo-600 to-indigo-400 shadow-[0_0_20px_-4px_rgba(99,102,241,0.8)]">
-              <svg viewBox="0 0 24 24" className="h-4 w-4 text-white" fill="none" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z" />
-              </svg>
-            </span>
-            API<span className="text-indigo-400">racy</span>
-          </a>
-          <nav className="hidden items-center gap-8 text-sm text-zinc-400 sm:flex">
-            <a href="#features" className="transition-colors hover:text-zinc-100">Features</a>
-            <a href="#playground" className="transition-colors hover:text-zinc-100">Playground</a>
-            <a href="/docs" className="transition-colors hover:text-zinc-100">API Reference</a>
-            <a href="/api/health" className="transition-colors hover:text-zinc-100">Status</a>
-          </nav>
-          <a
-            href="#playground"
-            className="btn-primary rounded-lg px-4 py-2 text-sm font-medium text-white"
-          >
-            Try it
-          </a>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="relative mx-auto max-w-6xl px-6">
         {/* Hero */}
         <section className="animate-rise pt-20 pb-10 text-center sm:pt-28">
-          <a
+          <Link
             href="/docs"
             className="inline-flex items-center gap-2 rounded-full border border-zinc-700/60 bg-space-850/60 px-3 py-1 text-xs font-medium text-zinc-400 backdrop-blur transition-colors hover:text-zinc-200"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_2px_rgba(52,211,153,0.6)]" />
             OpenAPI 3.1 documented · no auth required
-          </a>
+          </Link>
           <h1 className="font-display mx-auto mt-6 max-w-3xl text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
             <span className="text-shimmer">Image processing</span>
             <br />
@@ -285,15 +212,21 @@ export default function Home() {
             <a href="#playground" className="btn-primary rounded-lg px-5 py-2.5 text-sm font-semibold text-white">
               Open the playground
             </a>
-            <a href="/docs" className="btn-ghost rounded-lg border border-zinc-700/60 px-5 py-2.5 text-sm font-semibold text-zinc-200">
+            <Link href="/docs" className="btn-ghost rounded-lg border border-zinc-700/60 px-5 py-2.5 text-sm font-semibold text-zinc-200">
               Read the docs
-            </a>
+            </Link>
           </div>
           <StellarOrb />
         </section>
 
         {/* Features */}
         <section id="features" className="scroll-mt-20 py-16">
+          <div className="mb-10 text-center">
+            <SectionLabel>Built for developers</SectionLabel>
+            <h2 className="font-display mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              Everything you&apos;d expect, on the edge
+            </h2>
+          </div>
           <div className="grid gap-5 sm:grid-cols-3">
             {FEATURES.map((f) => (
               <SpotlightCard key={f.title} className="p-6">
@@ -312,7 +245,8 @@ export default function Home() {
         {/* Playground */}
         <section id="playground" className="scroll-mt-20 pb-24">
           <div className="mb-8 text-center">
-            <h2 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            <SectionLabel>Try it live</SectionLabel>
+            <h2 className="font-display mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
               Live playground
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-zinc-400">
@@ -328,7 +262,9 @@ export default function Home() {
                   key={m}
                   onClick={() => switchMode(m)}
                   className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
-                    mode === m ? "bg-linear-to-t from-indigo-600 to-indigo-500 text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.18)]" : "text-zinc-400 hover:text-zinc-200"
+                    mode === m
+                      ? "bg-linear-to-t from-indigo-600 to-indigo-500 text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.18)]"
+                      : "text-zinc-400 hover:text-zinc-200"
                   }`}
                 >
                   {m === "image" ? "Image" : "Video thumbnail"}
@@ -418,7 +354,10 @@ export default function Home() {
                 <button type="submit" disabled={loading} className="btn-primary flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white disabled:cursor-wait disabled:opacity-70">
                   {loading ? (
                     <>
-                      <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.4 0 0 5.4 0 12h4z" /></svg>
+                      <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.4 0 0 5.4 0 12h4z" />
+                      </svg>
                       Processing…
                     </>
                   ) : (
@@ -481,18 +420,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-white/5 bg-space-950/40">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-zinc-500 sm:flex-row">
-          <p>
-            API<span className="text-indigo-400">racy</span> — cached in Supabase, deployed on Vercel.
-          </p>
-          <div className="flex gap-6">
-            <a href="/docs" className="transition-colors hover:text-zinc-300">API Reference</a>
-            <a href="/api/openapi.json" className="transition-colors hover:text-zinc-300">OpenAPI</a>
-            <a href="/api/health" className="transition-colors hover:text-zinc-300">Status</a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }
