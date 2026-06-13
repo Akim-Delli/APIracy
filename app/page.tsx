@@ -66,6 +66,21 @@ function Header() {
               </a>
             ),
           )}
+          <a
+            href="https://github.com/Akim-Delli/APIracy"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Opens GitHub in a new tab"
+            className="inline-flex items-center gap-1.5 transition-colors hover:text-white"
+          >
+            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
+              <path d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.2 3.44 9.6 8.21 11.16.6.11.82-.25.82-.56 0-.28-.01-1.02-.02-2-3.34.72-4.04-1.59-4.04-1.59-.55-1.38-1.34-1.75-1.34-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.22 1.84 1.22 1.07 1.8 2.81 1.28 3.5.98.11-.77.42-1.28.76-1.58-2.67-.3-5.47-1.31-5.47-5.84 0-1.29.47-2.34 1.24-3.17-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.21a11.6 11.6 0 016 0c2.29-1.53 3.3-1.21 3.3-1.21.66 1.66.25 2.88.12 3.18.77.83 1.24 1.88 1.24 3.17 0 4.54-2.81 5.54-5.49 5.83.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .31.21.68.83.56A12.02 12.02 0 0024 12.29C24 5.78 18.63.5 12 .5z" />
+            </svg>
+            GitHub
+            <svg viewBox="0 0 24 24" className="h-3 w-3 opacity-60" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M9 7h8v8" />
+            </svg>
+          </a>
         </nav>
       </div>
     </header>
@@ -186,10 +201,7 @@ export default function Home() {
               thumbnail from a video — in a single GET request. Results cached on the edge.
             </p>
             <div className="mt-8 flex items-center justify-center gap-3">
-              <Link
-                href="/docs"
-                className="glass rounded-xl px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-              >
+              <Link href="/docs" className="btn-gradient rounded-xl px-5 py-3 text-sm font-semibold">
                 Read the docs
               </Link>
             </div>
