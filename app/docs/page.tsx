@@ -68,6 +68,10 @@ export default function DocsPage() {
         url: "/api/openapi.json",
         theme: "purple",
         hideClientButton: true,
+        // The built-in client-library snippets (@scalar/snippetz) have no
+        // TypeScript target, so hide them and surface our x-codeSamples
+        // (TypeScript + cURL) as the code examples instead.
+        hiddenClients: true,
         darkMode: themeRef.current === "dark",
         forceDarkModeState: themeRef.current,
         hideDarkModeToggle: true,
