@@ -25,7 +25,7 @@ function AuroraBackground() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-ink-950">
       <div className="animate-aurora absolute -top-1/3 -left-1/4 h-[55rem] w-[55rem] rounded-full bg-[radial-gradient(circle,rgba(139,92,246,0.35),transparent_60%)] blur-3xl" />
-      <div className="animate-aurora-slow absolute -top-1/4 right-0 h-[45rem] w-[45rem] rounded-full bg-[radial-gradient(circle,rgba(217,70,239,0.28),transparent_60%)] blur-3xl [animation-delay:3s]" />
+      <div className="animate-aurora-slow absolute -top-1/4 right-0 h-[45rem] w-[45rem] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.28),transparent_60%)] blur-3xl [animation-delay:3s]" />
       <div className="animate-aurora absolute bottom-0 left-1/4 h-[40rem] w-[40rem] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.25),transparent_60%)] blur-3xl [animation-delay:6s]" />
       {/* faint grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[length:56px_56px] [mask-image:radial-gradient(ellipse_75%_60%_at_50%_30%,#000_50%,transparent_100%)]" />
@@ -46,13 +46,13 @@ function Header() {
     <header className="sticky top-0 z-30 border-b border-white/5 bg-ink-950/60 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link href="/" className="font-display flex items-center gap-2.5 text-lg font-bold tracking-tight text-white">
-          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-linear-to-br from-violet-500 via-fuchsia-500 to-cyan-400 shadow-[0_0_24px_-4px_rgba(217,70,239,0.8)]">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-linear-to-br from-violet-500 via-blue-500 to-cyan-400 shadow-[0_0_24px_-4px_rgba(59,130,246,0.8)]">
             <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 text-white" fill="none" stroke="currentColor" strokeWidth={2.2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l5-5 4 4 3-3 4 4M4 8h.01" />
               <rect x="3" y="4" width="18" height="16" rx="2.5" />
             </svg>
           </span>
-          API<span className="gradient-text">racy</span>
+          <span>API<span className="gradient-text">racy</span></span>
         </Link>
         <nav className="flex items-center gap-5 text-sm text-zinc-400 sm:gap-7">
           {NAV.map((item) =>
@@ -160,7 +160,7 @@ export default function Home() {
   }
 
   const fieldClass =
-    "w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-sm text-white placeholder:text-zinc-600 outline-none transition-all focus:border-fuchsia-400/50 focus:ring-2 focus:ring-fuchsia-500/20";
+    "w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-sm text-white placeholder:text-zinc-600 outline-none transition-all focus:border-blue-400/50 focus:ring-2 focus:ring-blue-500/20";
   const labelClass = "mb-1.5 block text-xs font-medium uppercase tracking-wider text-zinc-500";
 
   return (
@@ -186,9 +186,6 @@ export default function Home() {
               thumbnail from a video — in a single GET request. Results cached on the edge.
             </p>
             <div className="mt-8 flex items-center justify-center gap-3">
-              <a href="#playground" className="btn-gradient rounded-xl px-5 py-3 text-sm font-semibold">
-                Open the playground
-              </a>
               <Link
                 href="/docs"
                 className="glass rounded-xl px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
@@ -202,8 +199,7 @@ export default function Home() {
         {/* Playground */}
         <section id="playground" className="scroll-mt-20 pb-24">
           <div className="mb-8 text-center">
-            <span className="gradient-text text-sm font-semibold">Try it live</span>
-            <h2 className="font-display mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            <h2 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
               Playground
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-zinc-400">
@@ -302,7 +298,7 @@ export default function Home() {
 
                 <div className="mb-6">
                   <label htmlFor="quality" className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-zinc-500">
-                    <input type="checkbox" checked={useQuality} onChange={(e) => setUseQuality(e.target.checked)} className="h-3.5 w-3.5 accent-fuchsia-500" />
+                    <input type="checkbox" checked={useQuality} onChange={(e) => setUseQuality(e.target.checked)} className="h-3.5 w-3.5 accent-blue-500" />
                     Quality: {useQuality ? quality : "default"}
                   </label>
                   <input id="quality" type="range" min={1} max={100} value={quality} disabled={!useQuality} onChange={(e) => setQuality(e.target.value)} className="w-full" />
@@ -360,7 +356,7 @@ export default function Home() {
                   <span className="font-mono text-xs text-zinc-500">REQUEST</span>
                   <CopyButton text={absoluteUrl} label="Copy URL" />
                 </div>
-                <pre className="overflow-x-auto whitespace-pre-wrap break-all font-mono text-xs leading-relaxed text-fuchsia-200/90">
+                <pre className="overflow-x-auto whitespace-pre-wrap break-all font-mono text-xs leading-relaxed text-blue-200/90">
                   GET {requestPath}
                 </pre>
                 <div className="my-3 h-px bg-white/10" />
