@@ -167,6 +167,29 @@ export const openApiDocument = {
           },
           ...transformParams("image"),
         ],
+        "x-codeSamples": [
+          {
+            lang: "TypeScript",
+            label: "fetch",
+            source: `const params = new URLSearchParams({
+  url: "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg",
+  width: "500",
+  height: "300",
+  format: "webp",
+});
+
+const res = await fetch(\`https://apiracy.vercel.app/api/process?\${params}\`);
+if (!res.ok) throw new Error(\`Processing failed: \${res.status}\`);
+
+const blob = await res.blob();
+const objectUrl = URL.createObjectURL(blob); // e.g. assign to <img src>`,
+          },
+          {
+            lang: "Shell",
+            label: "cURL",
+            source: `curl -L "https://apiracy.vercel.app/api/process?url=https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg&width=500&height=300&format=webp" -o output.webp`,
+          },
+        ],
         responses: imageResponses,
       },
     },
@@ -196,6 +219,29 @@ export const openApiDocument = {
             example: "5",
           },
           ...transformParams("thumbnail"),
+        ],
+        "x-codeSamples": [
+          {
+            lang: "TypeScript",
+            label: "fetch",
+            source: `const params = new URLSearchParams({
+  url: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4",
+  time: "5",
+  width: "480",
+  format: "jpeg",
+});
+
+const res = await fetch(\`https://apiracy.vercel.app/api/video/thumbnail?\${params}\`);
+if (!res.ok) throw new Error(\`Thumbnail failed: \${res.status}\`);
+
+const blob = await res.blob();
+const objectUrl = URL.createObjectURL(blob);`,
+          },
+          {
+            lang: "Shell",
+            label: "cURL",
+            source: `curl -L "https://apiracy.vercel.app/api/video/thumbnail?url=https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4&time=5&width=480&format=jpeg" -o thumbnail.jpg`,
+          },
         ],
         responses: imageResponses,
       },
