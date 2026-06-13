@@ -1,0 +1,18 @@
+# Local development convenience. `docker compose up --build` then open
+# http://localhost:3000. Runs in cache-bypass mode unless you provide
+# Supabase credentials (see .env.example) in a local .env file.
+services:
+  apiracy:
+    build: .
+    container_name: apiracy
+    ports:
+      - "3000:3000"
+    # Values are read from a local .env file if present; missing ones default
+    # to empty (the API then streams results directly, X-Cache: BYPASS).
+    environment:
+      SUPABASE_URL: ${SUPABASE_URL:-}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
+      SUPABASE_BUCKET: ${SUPABASE_BUCKET:-processed-media}
+      # Set to true only locally if you want to fetch from private/localhost hosts.
+      SSRF_ALLOW_PRIVATE: ${SSRF_ALLOW_PRIVATE:-}
+    restart: unless-stopped
