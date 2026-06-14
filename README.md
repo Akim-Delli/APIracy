@@ -1,24 +1,26 @@
-<p align="center">
-  <a href="https://apiracy.vercel.app/">
-    <img src="app/icon.png" alt="APIracy" width="80" />
-  </a>
-</p>
-
 <h1 align="center">APIracy — Image Processing Service</h1>
 
-<p align="center">
+<h3 align="center">
   <strong>Live:</strong> <a href="https://apiracy.vercel.app/">apiracy.vercel.app</a>
-</p>
+</h3>
 
-[![Lint](https://github.com/Akim-Delli/APIracy/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/Akim-Delli/APIracy/actions/workflows/lint.yml)
-[![Tests](https://github.com/Akim-Delli/APIracy/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Akim-Delli/APIracy/actions/workflows/test.yml)
-[![Build](https://github.com/Akim-Delli/APIracy/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Akim-Delli/APIracy/actions/workflows/build.yml)
-[![Deploy](https://github.com/Akim-Delli/APIracy/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Akim-Delli/APIracy/actions/workflows/deploy.yml)
-[![Coverage](https://raw.githubusercontent.com/Akim-Delli/APIracy/main/badges/coverage.svg)](https://github.com/Akim-Delli/APIracy/actions/workflows/coverage.yml)
-![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)
-![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
-![Vercel](https://img.shields.io/badge/deployed%20on-Vercel-black?logo=vercel)
-![Supabase](https://img.shields.io/badge/cache-Supabase-3FCF8E?logo=supabase&logoColor=white)
+<p align="center">
+  <table>
+    <tr>
+      <td align="center"><a href="https://github.com/Akim-Delli/APIracy/actions/workflows/lint.yml"><img src="https://github.com/Akim-Delli/APIracy/actions/workflows/lint.yml/badge.svg?branch=main" alt="Lint"></a></td>
+      <td align="center"><a href="https://github.com/Akim-Delli/APIracy/actions/workflows/test.yml"><img src="https://github.com/Akim-Delli/APIracy/actions/workflows/test.yml/badge.svg?branch=main" alt="Tests"></a></td>
+      <td align="center"><a href="https://github.com/Akim-Delli/APIracy/actions/workflows/build.yml"><img src="https://github.com/Akim-Delli/APIracy/actions/workflows/build.yml/badge.svg?branch=main" alt="Build"></a></td>
+      <td align="center"><a href="https://github.com/Akim-Delli/APIracy/actions/workflows/deploy.yml"><img src="https://github.com/Akim-Delli/APIracy/actions/workflows/deploy.yml/badge.svg?branch=main" alt="Deploy"></a></td>
+      <td align="center"><a href="https://github.com/Akim-Delli/APIracy/actions/workflows/coverage.yml"><img src="https://raw.githubusercontent.com/Akim-Delli/APIracy/main/badges/coverage.svg" alt="Coverage"></a></td>
+    </tr>
+    <tr>
+      <td align="center"><img src="https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white" alt="TypeScript"></td>
+      <td align="center"><img src="https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs" alt="Next.js"></td>
+      <td align="center"><img src="https://img.shields.io/badge/deployed%20on-Vercel-black?logo=vercel" alt="Vercel"></td>
+      <td align="center"><img src="https://img.shields.io/badge/cache-Supabase-3FCF8E?logo=supabase&logoColor=white" alt="Supabase"></td>
+    </tr>
+  </table>
+</p>
 
 A Cloudinary-style image processing API: pass a public image URL and transformation
 parameters, get back a resized/converted image. Try it at **[apiracy.vercel.app](https://apiracy.vercel.app/)**.
