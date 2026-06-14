@@ -4,6 +4,7 @@ import { config } from "@/lib/config";
 import { errorResponse } from "@/lib/errors";
 import { fetchSource } from "@/lib/fetch-source";
 import { transformImage } from "@/lib/image-pipeline";
+import { checkRateLimit, clientIp, rateLimitResponse } from "@/lib/rate-limit";
 import { respondFromCache, respondWithResult } from "@/lib/respond";
 import { parseQuery, processQuerySchema } from "@/lib/schemas";
 
@@ -11,6 +12,13 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 export async function GET(request: NextRequest): Promise<Response> {
+  const limit = checkRateLimit(
+    `process:${clientIp(request)}`,
+    config.rateLimits.process,
+    config.rateLimits.windowMs,
+  );
+  if (!limit.allowed) return rateLimitResponse(limit);
+
   try {
     const params = parseQuery(processQuerySchema, request.nextUrl.searchParams);
     const objectPath = cacheKey("images", params);

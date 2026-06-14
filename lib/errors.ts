@@ -4,6 +4,7 @@ export type ErrorCode =
   | "SOURCE_FETCH_FAILED"
   | "UNSUPPORTED_MEDIA_TYPE"
   | "PROCESSING_FAILED"
+  | "RATE_LIMITED"
   | "INTERNAL_ERROR";
 
 export interface ErrorDetail {
@@ -45,6 +46,10 @@ export class ApiError extends Error {
 
   static processingFailed(message: string): ApiError {
     return new ApiError(422, "PROCESSING_FAILED", message);
+  }
+
+  static rateLimited(message: string): ApiError {
+    return new ApiError(429, "RATE_LIMITED", message);
   }
 
   toBody(): { error: { code: ErrorCode; message: string; details?: ErrorDetail[] } } {

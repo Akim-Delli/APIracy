@@ -103,7 +103,17 @@ Same transform params as above (output `format` defaults to `jpeg`), plus:
 | 415 | `UNSUPPORTED_MEDIA_TYPE` | Source fetched but not decodable as image/video |
 | 422 | `SOURCE_FETCH_FAILED` | Source unreachable, non-2xx, too large or timed out |
 | 422 | `PROCESSING_FAILED` | Decode/transform failed (e.g. frame time past end of video) |
+| 429 | `RATE_LIMITED` | Too many requests from this client (see Rate limiting) |
 | 500 | `INTERNAL_ERROR` | Unexpected failure |
+
+### Rate limiting
+
+The public endpoints carry a generous per-IP rate limit so an open, unauthenticated
+service can't be trivially abused or run up compute/LLM costs. Over the limit returns
+`429 RATE_LIMITED` with `Retry-After` and `RateLimit-*` headers. Defaults (tunable via
+`RATE_LIMIT_*` env vars): `/api/process` 100/min, `/api/video/thumbnail` 30/min,
+`/api/chat` 20/min. The limiter is in-memory (best-effort per serverless instance) — for a
+strict global quota, back it with a shared store like Upstash Redis or Vercel KV.
 
 ## Architecture
 

@@ -18,4 +18,13 @@ export const config = {
   get allowPrivateHosts(): boolean {
     return process.env.SSRF_ALLOW_PRIVATE === "true";
   },
+  /** Per-IP request budgets (generous defaults; tune via env). */
+  get rateLimits() {
+    return {
+      windowMs: intFromEnv("RATE_LIMIT_WINDOW_MS", 60_000),
+      process: intFromEnv("RATE_LIMIT_PROCESS", 100),
+      video: intFromEnv("RATE_LIMIT_VIDEO", 30),
+      chat: intFromEnv("RATE_LIMIT_CHAT", 20),
+    };
+  },
 };

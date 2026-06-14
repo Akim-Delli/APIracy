@@ -2,7 +2,9 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { NextRequest } from "next/server";
 import { CHAT_DISABLED_MESSAGE, SYSTEM_PROMPT } from "@/lib/assistant-prompt";
 import { parseChatMessages } from "@/lib/chat";
+import { config } from "@/lib/config";
 import { errorResponse } from "@/lib/errors";
+import { checkRateLimit, clientIp, rateLimitResponse } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 30;
@@ -10,6 +12,13 @@ export const maxDuration = 30;
 const MODEL = "claude-haiku-4-5";
 
 export async function POST(request: NextRequest): Promise<Response> {
+  const limit = checkRateLimit(
+    `chat:${clientIp(request)}`,
+    config.rateLimits.chat,
+    config.rateLimits.windowMs,
+  );
+  if (!limit.allowed) return rateLimitResponse(limit);
+
   let messages;
   try {
     messages = parseChatMessages(await request.json().catch(() => null));
