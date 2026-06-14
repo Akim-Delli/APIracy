@@ -4,6 +4,7 @@
 [![Tests](https://github.com/Akim-Delli/APIracy/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Akim-Delli/APIracy/actions/workflows/test.yml)
 [![Build](https://github.com/Akim-Delli/APIracy/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Akim-Delli/APIracy/actions/workflows/build.yml)
 [![Deploy](https://github.com/Akim-Delli/APIracy/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Akim-Delli/APIracy/actions/workflows/deploy.yml)
+[![Coverage](https://raw.githubusercontent.com/Akim-Delli/APIracy/main/badges/coverage.svg)](https://github.com/Akim-Delli/APIracy/actions/workflows/coverage.yml)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
 ![Vercel](https://img.shields.io/badge/deployed%20on-Vercel-black?logo=vercel)

@@ -1,0 +1,47 @@
+name: Coverage
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+concurrency:
+  group: coverage-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  coverage:
+    name: Test coverage
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Fails the job if coverage drops below the thresholds in vitest.config.ts.
+      - name: Run coverage
+        run: npm run test:coverage
+
+      - name: Generate badge
+        run: node scripts/coverage-badge.mjs
+
+      # Keep the committed badge in sync with reality, but only from main so
+      # the badge always reflects the deployed state. Skips CI to avoid loops.
+      - name: Commit badge
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          if ! git diff --quiet -- badges/coverage.svg; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add badges/coverage.svg
+            git commit -m "chore: update coverage badge [skip ci]"
+            git push
+          fi
