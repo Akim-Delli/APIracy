@@ -14,7 +14,9 @@ const SAMPLE_URLS: Record<Mode, string> = {
 
 interface ResultState {
   objectUrl: string;
-  cache: string;
+  cacheLabel: string;
+  cacheSource: string | null;
+  cached: boolean;
   latencyMs: number;
   bytes: number;
   width: string | null;
@@ -85,9 +87,40 @@ export default function Home() {
       if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
       const objectUrl = URL.createObjectURL(blob);
       objectUrlRef.current = objectUrl;
+
+      // Cache status spans two layers: our app's X-Cache (set when the function
+      // runs) and Vercel's edge CDN (X-Vercel-Cache / Age), which replays the
+      // first response without re-invoking the function. Surface whichever
+      // actually served the bytes.
+      const vercelCache = response.headers.get("x-vercel-cache");
+      const appCache = response.headers.get("x-cache");
+      const age = Number(response.headers.get("age") ?? "0");
+      let cacheLabel = appCache ?? "MISS";
+      let cacheSource: string | null = null;
+      let cached = false;
+      if (response.redirected) {
+        cacheLabel = "HIT";
+        cacheSource = "Supabase CDN";
+        cached = true;
+      } else if (vercelCache === "HIT" || vercelCache === "STALE" || age > 0) {
+        cacheLabel = vercelCache === "STALE" ? "STALE" : "HIT";
+        cacheSource = "edge";
+        cached = true;
+      } else if (appCache === "HIT") {
+        cacheLabel = "HIT";
+        cacheSource = "Supabase";
+        cached = true;
+      } else if (appCache === "BYPASS") {
+        cacheLabel = "BYPASS";
+      } else {
+        cacheLabel = "MISS";
+      }
+
       setResult({
         objectUrl,
-        cache: response.headers.get("x-cache") ?? (response.redirected ? "HIT" : "?"),
+        cacheLabel,
+        cacheSource,
+        cached,
         latencyMs,
         bytes: blob.size,
         width: response.headers.get("x-image-width"),
@@ -270,7 +303,18 @@ export default function Home() {
               <div className="glass-card p-5">
                 {result && (
                   <div className="mb-4 flex flex-wrap gap-2">
-                    <Badge label="cache" value={result.cache} tone={result.cache === "HIT" ? "emerald" : "amber"} />
+                    <Badge
+                      label="cache"
+                      value={result.cacheSource ? `${result.cacheLabel} · ${result.cacheSource}` : result.cacheLabel}
+                      tone={result.cached ? "emerald" : "amber"}
+                      title={
+                        result.cached
+                          ? `Served from cache (${result.cacheSource}) — no reprocessing`
+                          : result.cacheLabel === "BYPASS"
+                            ? "Caching is disabled (Supabase not configured)"
+                            : "Freshly processed, then stored in the cache"
+                      }
+                    />
                     <Badge label="" value={`${result.latencyMs} ms`} />
                     <Badge label="" value={`${(result.bytes / 1024).toFixed(1)} KB`} />
                     {result.width && result.height && <Badge label="" value={`${result.width}×${result.height}`} />}
@@ -352,10 +396,23 @@ function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) 
   );
 }
 
-function Badge({ label, value, tone }: { label: string; value: string; tone?: "emerald" | "amber" }) {
+function Badge({
+  label,
+  value,
+  tone,
+  title,
+}: {
+  label: string;
+  value: string;
+  tone?: "emerald" | "amber";
+  title?: string;
+}) {
   const valueColor = tone === "emerald" ? "text-emerald-400" : tone === "amber" ? "text-amber-400" : "text-[var(--fg)]";
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--field-bg)] px-2.5 py-1 font-mono text-xs text-[var(--fg-subtle)]">
+    <span
+      title={title}
+      className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--field-bg)] px-2.5 py-1 font-mono text-xs text-[var(--fg-subtle)]"
+    >
       {label && <span>{label}</span>}
       <span className={`font-semibold ${valueColor}`}>{value}</span>
     </span>
