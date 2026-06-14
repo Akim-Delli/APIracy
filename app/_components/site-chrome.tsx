@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import Image from "next/image";
 import Link from "next/link";
 
 export type Theme = "light" | "dark";
@@ -78,12 +79,14 @@ export function Header() {
     <header className="sticky top-0 z-30 border-b border-[var(--hairline)] bg-[var(--header-bg)] backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link href="/" className="font-display flex items-center gap-2.5 text-lg font-bold tracking-tight text-[var(--fg)]">
-          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-linear-to-br from-violet-500 via-blue-500 to-cyan-400 shadow-[0_0_24px_-4px_rgba(59,130,246,0.8)]">
-            <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 text-white" fill="none" stroke="currentColor" strokeWidth={2.2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l5-5 4 4 3-3 4 4M4 8h.01" />
-              <rect x="3" y="4" width="18" height="16" rx="2.5" />
-            </svg>
-          </span>
+          <Image
+            src="/logo.png"
+            alt="APIracy logo"
+            width={32}
+            height={32}
+            priority
+            className="h-8 w-8 rounded-xl shadow-[0_0_24px_-4px_rgba(59,130,246,0.8)]"
+          />
           <span>API<span className="gradient-text">racy</span></span>
         </Link>
         <nav className="flex items-center gap-5 text-sm text-[var(--fg-muted)] sm:gap-7">

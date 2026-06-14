@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/logo.png" alt="APIracy logo" width="96" height="96">
+</p>
+
 <h1 align="center">APIracy — Image Processing Service</h1>
 
 <h3 align="center">
