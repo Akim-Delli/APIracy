@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -12,11 +13,16 @@ interface Msg {
 const WELCOME =
   "Hi — I'm Akim's digital twin. Ask me anything about APIracy (how to use the API, set it up, the architecture) or software engineering in general.";
 
-function SparkleIcon({ className }: { className?: string }) {
+function Avatar({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
-      <path d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576L1.044 12.5a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 6.466 7.67l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.394a.75.75 0 0 1 0 1.424l-1.183.394a1.5 1.5 0 0 0-.948.948l-.394 1.183a.75.75 0 0 1-1.424 0l-.394-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.394a.75.75 0 0 1 0-1.424l1.183-.394c.447-.15.799-.5.948-.948l.394-1.183A.75.75 0 0 1 16.5 15Z" />
-    </svg>
+    <Image
+      src="/avatar.jpg"
+      alt="Akim"
+      width={56}
+      height={56}
+      priority
+      className={className}
+    />
   );
 }
 
@@ -113,9 +119,7 @@ export function ChatWidget() {
           {/* header */}
           <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
             <div className="flex items-center gap-2.5">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-violet-500 via-blue-500 to-cyan-400 text-white shadow-[0_0_18px_-4px_rgba(59,130,246,0.8)]">
-                <SparkleIcon className="h-4 w-4" />
-              </span>
+              <Avatar className="h-8 w-8 rounded-full object-cover ring-2 ring-blue-500/40 shadow-[0_0_18px_-4px_rgba(59,130,246,0.8)]" />
               <p className="font-display text-sm font-semibold text-[var(--fg)]">Akim&apos;s digital twin</p>
             </div>
             <button
@@ -209,9 +213,11 @@ export function ChatWidget() {
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close assistant" : "Open assistant"}
         aria-expanded={open}
-        className="btn-gradient ml-auto flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform hover:scale-105"
+        className={`ml-auto flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform hover:scale-105 ${
+          open ? "btn-gradient" : "overflow-hidden ring-2 ring-blue-500/50"
+        }`}
       >
-        {open ? <CloseIcon className="h-6 w-6" /> : <SparkleIcon className="h-6 w-6" />}
+        {open ? <CloseIcon className="h-6 w-6" /> : <Avatar className="h-full w-full object-cover" />}
       </button>
     </div>
   );
