@@ -12,7 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "setup:supabase": "tsx scripts/setup-supabase.ts"
+    "setup:supabase": "tsx scripts/setup-supabase.ts",
+    "check:supabase": "tsx scripts/check-supabase.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.104.1",
