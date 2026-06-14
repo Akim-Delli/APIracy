@@ -1,4 +1,14 @@
-# APIracy 🏴‍☠️ — Image Processing Service
+<p align="center">
+  <a href="https://apiracy.vercel.app/">
+    <img src="app/icon.png" alt="APIracy" width="80" />
+  </a>
+</p>
+
+<h1 align="center">APIracy — Image Processing Service</h1>
+
+<p align="center">
+  <strong>Live:</strong> <a href="https://apiracy.vercel.app/">apiracy.vercel.app</a>
+</p>
 
 [![Lint](https://github.com/Akim-Delli/APIracy/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/Akim-Delli/APIracy/actions/workflows/lint.yml)
 [![Tests](https://github.com/Akim-Delli/APIracy/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Akim-Delli/APIracy/actions/workflows/test.yml)
@@ -11,8 +21,9 @@
 ![Supabase](https://img.shields.io/badge/cache-Supabase-3FCF8E?logo=supabase&logoColor=white)
 
 A Cloudinary-style image processing API: pass a public image URL and transformation
-parameters, get back a resized/converted image. Includes video thumbnail extraction,
-Supabase-backed CDN caching, an interactive playground UI and full OpenAPI documentation.
+parameters, get back a resized/converted image. Try it at **[apiracy.vercel.app](https://apiracy.vercel.app/)**.
+Includes video thumbnail extraction, Supabase-backed CDN caching, an interactive
+playground UI and full OpenAPI documentation.
 
 Built with **TypeScript / Next.js 16**, deployed on **Vercel** via **GitHub Actions**.
 
@@ -189,7 +200,8 @@ SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
 ### Run tests
 
 ```bash
-npm test           # 101 tests: unit + route integration (incl. real ffmpeg)
+npm test                # 130 tests: unit + route integration (incl. real ffmpeg)
+npm run test:coverage   # 91% line coverage on lib/ (see badges/coverage.svg)
 npm run lint
 npm run typecheck
 ```
