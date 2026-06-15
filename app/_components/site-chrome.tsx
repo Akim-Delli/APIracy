@@ -82,10 +82,10 @@ export function Header() {
           <Image
             src="/logo.png"
             alt="APIracy logo"
-            width={32}
-            height={32}
+            width={40}
+            height={40}
             priority
-            className="h-8 w-8 rounded-xl shadow-[0_0_24px_-4px_rgba(59,130,246,0.8)]"
+            className="h-10 w-10 rounded-xl shadow-[0_0_24px_-4px_rgba(59,130,246,0.8)]"
           />
           <span>API<span className="gradient-text">racy</span></span>
         </Link>
