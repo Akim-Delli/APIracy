@@ -70,7 +70,10 @@ export default function Home() {
     setError(null);
     const started = performance.now();
     try {
-      const response = await fetch(requestPath);
+      // Skip the browser's HTTP cache (the result is sent `immutable`, so a plain
+      // fetch would replay the first response and its stale headers). This forces a
+      // real network round-trip so the reported cache layer (edge / Supabase) is true.
+      const response = await fetch(requestPath, { cache: "no-store" });
       const latencyMs = Math.round(performance.now() - started);
       if (!response.ok) {
         let message = `HTTP ${response.status}`;
