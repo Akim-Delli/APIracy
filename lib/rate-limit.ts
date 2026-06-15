@@ -63,6 +63,17 @@ export function rateLimitHeaders(result: RateLimitResult): Record<string, string
   };
 }
 
+/**
+ * Adds the RateLimit-* headers to an already-built response, so well-behaved
+ * clients can see their remaining budget on success — not just on a 429.
+ */
+export function withRateLimitHeaders(response: Response, result: RateLimitResult): Response {
+  for (const [name, value] of Object.entries(rateLimitHeaders(result))) {
+    response.headers.set(name, value);
+  }
+  return response;
+}
+
 /** Standard 429 response sharing the API's JSON error envelope. */
 export function rateLimitResponse(result: RateLimitResult): Response {
   const body = ApiError.rateLimited(

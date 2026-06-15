@@ -54,6 +54,9 @@ describe("GET /api/process", () => {
     expect(response.headers.get("x-cache")).toBe("BYPASS"); // no Supabase configured
     expect(response.headers.get("x-image-width")).toBe("50");
     expect(response.headers.get("x-image-height")).toBe("40");
+    // successful responses expose the client's rate-limit budget, not just 429s
+    expect(response.headers.get("ratelimit-limit")).toBeTruthy();
+    expect(response.headers.get("ratelimit-remaining")).toBeTruthy();
 
     const body = Buffer.from(await response.arrayBuffer());
     const metadata = await sharp(body).metadata();

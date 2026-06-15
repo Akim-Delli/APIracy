@@ -216,7 +216,7 @@ SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
 ### Run tests
 
 ```bash
-npm test                # 130 tests: unit + route integration (incl. real ffmpeg)
+npm test                # 139 tests: unit + route integration (incl. real ffmpeg)
 npm run test:coverage   # 91% line coverage on lib/ (see badges/coverage.svg)
 npm run lint
 npm run typecheck

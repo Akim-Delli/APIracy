@@ -16,6 +16,7 @@ const errorSchema = {
             "SOURCE_FETCH_FAILED",
             "UNSUPPORTED_MEDIA_TYPE",
             "PROCESSING_FAILED",
+            "RATE_LIMITED",
             "INTERNAL_ERROR",
           ],
         },
@@ -41,6 +42,19 @@ const errorResponse = (description: string) => ({
   content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
 });
 
+/** Per-IP rate-limit headers returned on every response (RFC draft + RateLimit-*). */
+const rateLimitHeaderDocs = {
+  "RateLimit-Limit": { description: "Requests allowed per window", schema: { type: "integer" } },
+  "RateLimit-Remaining": {
+    description: "Requests remaining in the current window",
+    schema: { type: "integer" },
+  },
+  "RateLimit-Reset": {
+    description: "Seconds until the current window resets",
+    schema: { type: "integer" },
+  },
+} as const;
+
 const imageResponses = {
   "200": {
     description:
@@ -53,6 +67,7 @@ const imageResponses = {
       "X-Image-Width": { description: "Output width in pixels", schema: { type: "integer" } },
       "X-Image-Height": { description: "Output height in pixels", schema: { type: "integer" } },
       "X-Image-Format": { description: "Output format", schema: { type: "string" } },
+      ...rateLimitHeaderDocs,
     },
     content: {
       "image/jpeg": { schema: { type: "string", format: "binary" } },
@@ -67,6 +82,7 @@ const imageResponses = {
     headers: {
       Location: { description: "Public CDN URL of the cached result", schema: { type: "string" } },
       "X-Cache": { schema: { type: "string", enum: ["HIT"] } },
+      ...rateLimitHeaderDocs,
     },
   },
   "400": errorResponse("Invalid query parameters, or the source host is not allowed."),
@@ -74,6 +90,18 @@ const imageResponses = {
   "422": errorResponse(
     "The source could not be fetched (unreachable, non-2xx, too large, timed out) or processing failed.",
   ),
+  "429": {
+    description:
+      "Too many requests from this client (`RATE_LIMITED`). Includes a `Retry-After` header with the number of seconds to wait.",
+    headers: {
+      "Retry-After": {
+        description: "Seconds to wait before retrying",
+        schema: { type: "integer" },
+      },
+      ...rateLimitHeaderDocs,
+    },
+    content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+  },
   "500": errorResponse("Unexpected server error."),
 } as const;
 

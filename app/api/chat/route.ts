@@ -4,7 +4,7 @@ import { CHAT_DISABLED_MESSAGE, SYSTEM_PROMPT } from "@/lib/assistant-prompt";
 import { parseChatMessages } from "@/lib/chat";
 import { config } from "@/lib/config";
 import { errorResponse } from "@/lib/errors";
-import { checkRateLimit, clientIp, rateLimitResponse } from "@/lib/rate-limit";
+import { checkRateLimit, clientIp, rateLimitHeaders, rateLimitResponse } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 30;
@@ -28,7 +28,10 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   // Graceful degradation: no key configured -> friendly fallback, never a 500.
   if (!process.env.ANTHROPIC_API_KEY) {
-    return Response.json({ disabled: true, reply: CHAT_DISABLED_MESSAGE });
+    return Response.json(
+      { disabled: true, reply: CHAT_DISABLED_MESSAGE },
+      { headers: rateLimitHeaders(limit) },
+    );
   }
 
   const client = new Anthropic();
@@ -67,6 +70,7 @@ export async function POST(request: NextRequest): Promise<Response> {
       "content-type": "text/plain; charset=utf-8",
       "cache-control": "no-store",
       "x-accel-buffering": "no",
+      ...rateLimitHeaders(limit),
     },
   });
 }
