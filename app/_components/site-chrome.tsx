@@ -1,8 +1,8 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { Logo } from "./logo";
 
 export type Theme = "light" | "dark";
 
@@ -79,14 +79,7 @@ export function Header() {
     <header className="sticky top-0 z-30 border-b border-[var(--hairline)] bg-[var(--header-bg)] backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link href="/" className="font-display flex items-center gap-2.5 text-lg font-bold tracking-tight text-[var(--fg)]">
-          <Image
-            src="/logo.png"
-            alt="APIracy logo"
-            width={40}
-            height={40}
-            priority
-            className="h-10 w-10 rounded-xl shadow-[0_0_24px_-4px_rgba(59,130,246,0.8)]"
-          />
+          <Logo className="h-9 w-auto drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
           <span>API<span className="gradient-text">racy</span></span>
         </Link>
         <nav className="flex items-center gap-5 text-sm text-[var(--fg-muted)] sm:gap-7">

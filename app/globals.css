@@ -44,6 +44,7 @@
   --panel-bg: #12121c;
   --panel-muted: #1c1c29;
   --border-gradient: linear-gradient(135deg, rgba(167, 139, 250, 0.5), rgba(96, 165, 250, 0.3) 40%, rgba(34, 211, 238, 0.4));
+  --logo-accent: #ffffff;
 }
 
 /* Light theme. */
@@ -73,6 +74,7 @@
   --panel-bg: #ffffff;
   --panel-muted: #f1f2f8;
   --border-gradient: linear-gradient(135deg, rgba(124, 58, 237, 0.45), rgba(37, 99, 235, 0.3) 40%, rgba(8, 145, 178, 0.4));
+  --logo-accent: #16181d;
 }
 
 @keyframes aurora {
