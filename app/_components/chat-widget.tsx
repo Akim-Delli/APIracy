@@ -11,7 +11,7 @@ interface Msg {
 }
 
 const WELCOME =
-  "Hi — I'm Akim's digital twin. Ask me anything about APIracy (how to use the API, set it up, the architecture) or software engineering in general.";
+  "Hi! I'm Akim's digital twin. Ask me anything about APIracy — using the API, setting it up, how it's built — or software engineering in general.";
 
 function Avatar({ className }: { className?: string }) {
   return (
