@@ -29,7 +29,7 @@
 A Cloudinary-style image processing API: pass a public image URL and transformation
 parameters, get back a resized/converted image. Try it at **[apiracy.vercel.app](https://apiracy.vercel.app/)**.
 Includes video thumbnail extraction, Supabase-backed CDN caching, an interactive
-playground UI and full OpenAPI documentation.
+playground UI, full OpenAPI documentation and a Claude-backed assistant.
 
 Built with **TypeScript / Next.js 16**, deployed on **Vercel** via **GitHub Actions**.
 
@@ -57,6 +57,7 @@ GET /api/video/thumbnail?url=https://example.com/video.mp4&time=15
 | OpenAPI spec | `GET /api/openapi.json` | OpenAPI 3.1 document |
 | API reference | `GET /docs` | Interactive docs (Scalar) with a built-in request runner |
 | Playground UI | `GET /` | Visual playground: tweak parameters, preview results, copy curl snippets |
+| Assistant | chat widget · `POST /api/chat` | Claude-backed "digital twin" that answers questions about the API |
 
 No authentication — all endpoints are public by design.
 
@@ -149,23 +150,26 @@ flowchart LR
 ```
 app/
   page.tsx                    # playground UI
-  docs/route.ts               # Scalar API reference
+  docs/page.tsx               # Scalar API reference
   api/process/route.ts        # image endpoint
   api/video/thumbnail/route.ts
   api/health/route.ts
   api/openapi.json/route.ts
+  api/chat/route.ts           # digital-twin assistant (Claude)
+  _components/                # playground + chat widget UI
 lib/
   schemas.ts                  # zod param validation (single source of truth)
   fetch-source.ts             # SSRF-guarded source download
   image-pipeline.ts           # sharp transforms
   video-thumbnail.ts          # ffmpeg frame extraction
   storage.ts                  # Supabase Storage cache
-  cache-key.ts / respond.ts / errors.ts / config.ts / openapi.ts
+  rate-limit.ts               # per-IP rate limiter
+  cache-key.ts / respond.ts / errors.ts / config.ts / openapi.ts / chat.ts / assistant-prompt.ts
 tests/
-  unit/                       # schemas, ssrf, cache keys, pipeline
+  unit/                       # schemas, ssrf, cache keys, pipeline, rate limit, storage, ...
   integration/                # route handlers against a local fixture server
-scripts/setup-supabase.ts     # one-time bucket bootstrap
-.github/workflows/            # lint.yml, test.yml, build.yml + deploy.yml (Vercel)
+scripts/                      # setup-supabase.ts (bucket bootstrap), check-supabase.ts
+.github/workflows/            # lint, test, build, coverage + deploy (Vercel)
 ```
 
 ## Getting started
@@ -271,12 +275,6 @@ from it. No network or external services needed.
   checked against private/link-local/CGNAT ranges before fetching (and on every redirect
   hop), with download size caps and timeouts. There remains a theoretical DNS-rebinding
   window between check and fetch; pinning resolved IPs via a custom dialer would close it.
-- **Rate limiting is best-effort, not a hard quota**: the per-IP limiter (see
-  [Rate limiting](#rate-limiting)) keeps state in process memory, so on serverless it is
-  enforced per warm instance rather than globally. Combined with the size caps, dimension
-  caps (4096) and timeouts, it bounds per-request and per-client cost; a strict global
-  quota would back it with a shared store (Upstash Redis / Vercel KV). Auth is omitted by
-  design — all endpoints are public per the brief.
 - **Animated GIFs** are flattened to their first frame (documented sharp default here);
   preserving animation for gif/webp output is a possible extension.
 
