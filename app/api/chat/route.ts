@@ -34,6 +34,15 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
+  // Log the exact payload sent to Anthropic (visible in Vercel function logs).
+  // Set CHAT_LOG_PROMPTS=true to enable; off by default so prod logs stay clean.
+  if (process.env.CHAT_LOG_PROMPTS === "true") {
+    console.log(
+      "[chat] Anthropic request:",
+      JSON.stringify({ model: MODEL, system: SYSTEM_PROMPT, messages }, null, 2),
+    );
+  }
+
   const client = new Anthropic();
   const stream = client.messages.stream({
     model: MODEL,
@@ -42,15 +51,19 @@ export async function POST(request: NextRequest): Promise<Response> {
     messages,
   });
 
+  const logPrompts = process.env.CHAT_LOG_PROMPTS === "true";
   const encoder = new TextEncoder();
   const body = new ReadableStream<Uint8Array>({
     async start(controller) {
+      let reply = "";
       try {
         for await (const event of stream) {
           if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
+            if (logPrompts) reply += event.delta.text;
             controller.enqueue(encoder.encode(event.delta.text));
           }
         }
+        if (logPrompts) console.log("[chat] Anthropic response:", reply);
       } catch (err) {
         console.error("Chat stream error:", err);
         controller.enqueue(
