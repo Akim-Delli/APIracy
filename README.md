@@ -271,9 +271,12 @@ from it. No network or external services needed.
   checked against private/link-local/CGNAT ranges before fetching (and on every redirect
   hop), with download size caps and timeouts. There remains a theoretical DNS-rebinding
   window between check and fetch; pinning resolved IPs via a custom dialer would close it.
-- **No rate limiting / auth** per the requirements — the size caps, dimension caps (4096)
-  and timeouts bound per-request cost, but a public deployment would want per-IP rate
-  limits next.
+- **Rate limiting is best-effort, not a hard quota**: the per-IP limiter (see
+  [Rate limiting](#rate-limiting)) keeps state in process memory, so on serverless it is
+  enforced per warm instance rather than globally. Combined with the size caps, dimension
+  caps (4096) and timeouts, it bounds per-request and per-client cost; a strict global
+  quota would back it with a shared store (Upstash Redis / Vercel KV). Auth is omitted by
+  design — all endpoints are public per the brief.
 - **Animated GIFs** are flattened to their first frame (documented sharp default here);
   preserving animation for gif/webp output is a possible extension.
 
