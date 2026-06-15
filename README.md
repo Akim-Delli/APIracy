@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="public/logo.png" alt="APIracy logo" width="96" height="96">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/logo-dark.png">
+    <img src="public/logo-light.png" alt="APIracy logo" width="104">
+  </picture>
 </p>
 
 <h1 align="center">APIracy — Image Processing Service</h1>
